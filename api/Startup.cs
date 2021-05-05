@@ -14,7 +14,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-
+using api.Interface;
+using api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using api.Extensions;
 namespace api
 {
     public class Startup
@@ -25,16 +30,14 @@ namespace api
             _Config = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        {  services.AddAppServices(_Config);
+        services.AddIdentityServices(_Config);
             services.AddControllers();
-            services.AddDbContext<DataContext>(Options=>{
-                Options.UseSqlServer(_Config.GetConnectionString("DefaultConnection"));
-                });
+         
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
@@ -56,6 +59,7 @@ namespace api
 
             app.UseRouting();
             app.UseCors(policyName=>policyName.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
