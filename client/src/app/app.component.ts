@@ -1,5 +1,8 @@
+import { AccountService } from './_services/account.service';
+import { User } from './_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 
 @Component({
@@ -10,16 +13,21 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title="Social App";
 
-  Users:any;
+ 
 
-  constructor(private http :HttpClient){
+  constructor(private accountService:AccountService){
     
  }
  ngOnInit()
- {this.GetUsers();
+ {
+  this.setCurrentUser();
 }
-GetUsers()
-{this.http.get('https://localhost:5001/api/User/GetUsers').subscribe(response=>{this.Users=response;},error=>console.log(error));
+setCurrentUser()
+{ 
+const user:User=JSON.parse(localStorage.getItem('user'));
+this.accountService.setCurrentUser(user);
+
 }
+
 
 }
