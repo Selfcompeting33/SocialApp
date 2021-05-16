@@ -10,35 +10,55 @@ using System.Security.Cryptography;
 using System.Text.Unicode;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using api.Interface;
+using api.DTO;
+using AutoMapper;
 
 namespace api.Controllers
 {
-    public class UserController : ApiBaseController
+ // [Authorize]
+  public class UserController : ApiBaseController
+  {
+
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+
+    public UserController(IUserRepository userRepository, IMapper mapper)
     {
-        private readonly DataContext _Context;
+      _mapper = mapper;
+      _userRepository = userRepository;
 
-        public UserController(DataContext Context)
-        {
-            _Context = Context;
-        }
-
-        [HttpGet]
-        [Route("GetUsers")]
-       // [Authorize]
-       [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
-        {
-            return await _Context.Users.ToListAsync();
-        }
-
-        //  [HttpGet("{id}")]
-        [HttpGet]
-        [Route("GetUser/{id}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<AppUser>> GetUser(int id)
-        {
-            return await _Context.Users.FindAsync(id);
-        }
-      
     }
+
+    [HttpGet]
+    [Route("GetUsers")]
+
+    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
+    {
+      return Ok(await _userRepository.GetMembersAsync());
+  
+     
+    }
+
+    //  [HttpGet("{id}")]
+    [HttpGet]
+    [Route("GetUserById/{id}")]
+
+    public async Task<ActionResult<MemberDTO>> GetUser(int id)
+    {
+      var user= await _userRepository.GetUserByIdAsync(id);
+      var returnUser=_mapper.Map<MemberDTO>(user);
+      return Ok(returnUser);
+    }
+    [HttpGet]
+    [Route("GetUser/{username}")]
+
+
+    public async Task<ActionResult<MemberDTO>> GetUser(string username)
+    {
+      return await _userRepository.GetMemberAsync(username);
+    
+    }
+
+  }
 }

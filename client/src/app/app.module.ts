@@ -1,3 +1,4 @@
+import { TokenInterceptor } from './_interceptors/token.interceptor';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { NgModule, OnInit } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -21,6 +22,10 @@ import { SharedModule } from './_modules/shared.module';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { MemberCardComponent } from './Members/member-card/member-card.component';
+ import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+  
 
 
 @NgModule({
@@ -36,7 +41,8 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
     MemberdetailsComponent,
     TestErrorComponent,
     NotFoundComponent,
-    ServerErrorComponent
+    ServerErrorComponent,
+    MemberCardComponent
   ],
   imports: [
     BrowserModule,
@@ -44,11 +50,15 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    SharedModule
+    NgxGalleryModule,
+   
+    SharedModule,
+    NgbModule
   
 
   ],
-  providers: [{provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true}],
+  providers: [{provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true},
+  {provide:HTTP_INTERCEPTORS,useClass:TokenInterceptor,multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule  {

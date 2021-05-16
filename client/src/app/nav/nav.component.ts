@@ -23,8 +23,11 @@ login()
   
 this.accountservice.login(this.model).subscribe(Response=>{console.log(Response);
 
-this.router.navigateByUrl('/members');}
-,error=>{console.log(error); this.toastr.error(error.error);});
+  this.router.navigateByUrl('/members');}
+,error=>{console.log(error); 
+  const arr:string[]=error;
+  if(arr.length>1)
+this.toastr.error(error);});
 
 
 }

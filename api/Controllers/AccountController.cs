@@ -70,7 +70,7 @@ namespace api.Controllers
       if (ModelState.IsValid)
       {  var user=await _context.Users.SingleOrDefaultAsync(x=>x.UserName==loginDTO.username);
        if(user==null)
-       return NotFound("Username is invalid");
+       return BadRequest("Invalid Username");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
         var computedHash=hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.password));

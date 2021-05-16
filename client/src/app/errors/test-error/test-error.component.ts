@@ -1,3 +1,4 @@
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -23,6 +24,8 @@ get404error()
 
 get400validationerror()
 {this.http.post(this.baseurl+'account/register',{}).subscribe(response=>{console.log(response);},error=>{console.log(error);
+  this.validationError=error;
+  
 });
 
 }

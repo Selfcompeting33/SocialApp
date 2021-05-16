@@ -1,5 +1,6 @@
 using System.Text;
 using api.DAL;
+using api.Helpers;
 using api.Interface;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +14,7 @@ namespace api.Extensions
     public static class AppServiceExtension
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration _Config)
-    {
+    { services.AddAutoMapper(typeof(AutoMapperFiles).Assembly);
     
       services.AddDbContext<DataContext>(Options =>
       {
@@ -21,6 +22,7 @@ namespace api.Extensions
       });
 
       services.AddScoped<ITokenService, TokenService>();
+      services.AddScoped<IUserRepository, UserRepository>();
             return services;
     }
 }
