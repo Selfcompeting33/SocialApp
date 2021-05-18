@@ -1,5 +1,8 @@
 import { HttpClient,  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.prod';
 import { Member } from '../_models/member';
 // const httpOptions={headers:new HttpHeaders(
@@ -11,15 +14,18 @@ import { Member } from '../_models/member';
 })
 export class MemberService { 
    baseUrl=environment.apiURL;
+   members:Member[]=[];
  
   constructor(public  http:HttpClient) { }
   getMembers()
   {   
-
+if(this.members.length>0)
+return of(this.members);
     
 
-
-    return this.http.get<Member[]>(this.baseUrl+'user/GetUsers');
+    return this.http.get<Member[]>(this.baseUrl+'user/GetUsers').pipe(map(members=>{this.members=members;
+   return members;
+}));
 
 
 }
@@ -28,11 +34,20 @@ export class MemberService {
 
     
 
+const member=this.members.find(x=>x.userName===username);
+if(member!==undefined)
+return of(member);
 
-    return this.http.get<Member>(this.baseUrl+'user/GetUser/'+username);
-
+  return this.http.get<Member>(this.baseUrl+'user/GetUser/'+username);
+  
 
 }
- 
-  }
+updateMember(member:Member)
+{ 
+var index=this.members.indexOf(member) 
+return this.http.put<Member>(this.baseUrl+'user/UpdateUser',member).pipe(map(()=>{
+  this.members[index]=member;
+}));
+}
+ }
 

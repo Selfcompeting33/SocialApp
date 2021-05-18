@@ -25,6 +25,9 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { MemberCardComponent } from './Members/member-card/member-card.component';
  import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
  import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import { MemberEditComponent } from './Members/member-edit/member-edit.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
   
 
 
@@ -42,7 +45,8 @@ import { MemberCardComponent } from './Members/member-card/member-card.component
     TestErrorComponent,
     NotFoundComponent,
     ServerErrorComponent,
-    MemberCardComponent
+    MemberCardComponent,
+    MemberEditComponent
   ],
   imports: [
     BrowserModule,
@@ -51,14 +55,15 @@ import { MemberCardComponent } from './Members/member-card/member-card.component
     BrowserAnimationsModule,
     FormsModule,
     NgxGalleryModule,
-   
+   NgxSpinnerModule ,
     SharedModule,
     NgbModule
   
 
   ],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true},
-  {provide:HTTP_INTERCEPTORS,useClass:TokenInterceptor,multi:true}],
+  {provide:HTTP_INTERCEPTORS,useClass:TokenInterceptor,multi:true}, 
+  {provide:HTTP_INTERCEPTORS,useClass:LoadingInterceptor,multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule  {

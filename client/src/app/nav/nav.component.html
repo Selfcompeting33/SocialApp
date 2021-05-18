@@ -26,6 +26,10 @@
         <li class="nav-item">
           <a class="nav-link " routerLink='/error' routerLinkActive='active'>Errors</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link " routerLink='/members/edit' routerLinkActive='active'> Edit Profile</a>
+        </li>
+
 
       </ul>
       <div class="dropdown" *ngIf="(accountservice.currentUser$|async) as user" dropdown>
