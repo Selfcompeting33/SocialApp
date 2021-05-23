@@ -15,13 +15,14 @@ namespace api.Extensions
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration _Config)
     { services.AddAutoMapper(typeof(AutoMapperFiles).Assembly);
-    
+    services.Configure<CloudinarySettings>(_Config.GetSection("CloudinarySettings"));
       services.AddDbContext<DataContext>(Options =>
       {
         Options.UseSqlServer(_Config.GetConnectionString("DefaultConnection"));
       });
 
       services.AddScoped<ITokenService, TokenService>();
+      services.AddScoped<IPhotoService, PhotoService>();
       services.AddScoped<IUserRepository, UserRepository>();
             return services;
     }

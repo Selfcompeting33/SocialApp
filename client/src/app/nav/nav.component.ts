@@ -21,9 +21,10 @@ export class NavComponent implements OnInit {
 login()
 {
   
-this.accountservice.login(this.model).subscribe(Response=>{console.log(Response);
+this.accountservice.login(this.model).subscribe(user=>{console.log(user);
 
-  this.router.navigateByUrl('/members');}
+  this.router.navigateByUrl('/members');
+}
 ,error=>{console.log(error); 
   const arr:string[]=error;
   if(arr.length>1)

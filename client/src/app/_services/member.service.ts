@@ -49,5 +49,17 @@ return this.http.put<Member>(this.baseUrl+'user/UpdateUser',member).pipe(map(()=
   this.members[index]=member;
 }));
 }
+setMainPhoto(photoId:number)
+{
+return this.http.put(this.baseUrl+'user/setMainPhoto/'+photoId,{});
+
+}
+deletePhoto(id:number)
+{
+
+  return this.http.delete(this.baseUrl+'user/deletePhoto/'+id);
+}
+
+
  }
 

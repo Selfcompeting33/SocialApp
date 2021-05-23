@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
 using api.Interface;
 using Microsoft.AspNetCore.Authentication;
+using System.Linq;
 
 namespace api.Controllers
 {
@@ -68,7 +69,8 @@ namespace api.Controllers
     {
 
       if (ModelState.IsValid)
-      {  var user=await _context.Users.SingleOrDefaultAsync(x=>x.UserName==loginDTO.username);
+      {  var user= await _context.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.UserName == loginDTO.username);
+
        if(user==null)
        return BadRequest("Invalid Username");
 
@@ -80,7 +82,8 @@ namespace api.Controllers
    
       
        return new UserDTO{ Username=user.UserName,
-       Token=_tokenService.CreateToken(user)
+       Token=_tokenService.CreateToken(user),
+       PhotoUrl=user.Photos.FirstOrDefault(x=>x.IsMain==true)?.Url
 
        };
      
